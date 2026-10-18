@@ -1,0 +1,41 @@
+{% load i18n icons config_tags %}
+
+<div id="config-body">
+  <section class="config-section" id="sources">
+    <div class="config-section-header">
+      <h2><button type="button" class="btn round add-btn"
+                title="{% trans 'Add a source' %}"
+                aria-label="{% trans 'Add a source' %}"
+                hx-get="{% url 'mails:source_create' %}"
+                hx-target="#source-form-slot"
+                hx-swap="innerHTML show:top">+</button> {% trans "Mail sources" %}
+      </h2>
+    </div>
+    <div class="cards config-cards">
+      <div id="source-form-slot"></div>
+      {% include "mails/partials/source_card.html" %}
+      {% if not sources %}
+      <p class="empty">{% trans "No sources configured yet." %}</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="config-section" id="rules">
+    <div class="config-section-header">
+      <h2><button type="button" class="btn round add-btn"
+                title="{% trans 'Add a rule' %}"
+                aria-label="{% trans 'Add a rule' %}"
+                hx-get="{% url 'mails:rule_create' %}"
+                hx-target="#rule-form-slot"
+                hx-swap="innerHTML show:top">+</button> {% trans "Sorting rules" %}
+      </h2>
+    </div>
+    <div class="cards config-cards">
+      <div id="rule-form-slot"></div>
+      {% include "mails/partials/rule_card.html" %}
+      {% if not rules %}
+      <p class="empty">{% trans "No rules configured yet." %}</p>
+      {% endif %}
+    </div>
+  </section>
+</div>

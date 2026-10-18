@@ -1,0 +1,391 @@
+# French translations for Basil mail.
+# This file is distributed under the same license as the Basil mail project.
+msgid ""
+msgstr ""
+"Project-Id-Version: Basil mail\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "(no subject)"
+msgstr "(sans objet)"
+
+msgid "Add a rule"
+msgstr "Ajouter une règle"
+
+msgid "Add a source"
+msgstr "Ajouter une boîte"
+
+msgid "All mailboxes"
+msgstr "Toutes les boîtes"
+
+msgid "All rules"
+msgstr "Toutes les règles"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Body"
+msgstr "Corps"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Collect rule"
+msgstr ""
+
+msgid "Collect rules"
+msgstr "Règles de tri"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Connection failed: %(error)s"
+msgstr ""
+
+msgid "Connection succeeded but mailbox is not readable."
+msgstr "Connexion réussie mais la boîte n'est pas lisible."
+
+msgid "Connection succeeded, mailbox is readable."
+msgstr "Connexion réussie, la boîte est lisible."
+
+msgid "Created at"
+msgstr ""
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Delete this rule?"
+msgstr "Supprimer cette règle ?"
+
+msgid "Delete this source and all its mails?"
+msgstr "Supprimer cette boîte et tous ses e-mails ?"
+
+msgid "Disabled"
+msgstr "Désactivée"
+
+msgid "Edit"
+msgstr "Modifier"
+
+msgid "Edit rule"
+msgstr "Modifier la règle"
+
+msgid "Edit source"
+msgstr "Modifier la boîte"
+
+msgid "Enabled"
+msgstr "Activée"
+
+msgid "Exact match"
+msgstr "Correspondance exacte"
+
+msgid "Extracted link"
+msgstr ""
+
+msgid "Fetch frequency"
+msgstr "Fréquence de récupération"
+
+msgid "Fetch frequency (minutes)"
+msgstr "Fréquence (m)"
+
+msgid "Fetch now"
+msgstr "Récupérer maintenant"
+
+msgid "Fetch started…"
+msgstr "Récupération lancée…"
+
+msgid "Fetched at"
+msgstr ""
+
+msgid "IMAP host"
+msgstr "Hôte IMAP"
+
+msgid "IMAP port"
+msgstr "Port"
+
+msgid "Invalid regular expression."
+msgstr "Expression régulière invalide."
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Last fetch"
+msgstr "Dernière récupération"
+
+msgid "Link"
+msgstr "Lien"
+
+msgid "Mail"
+msgstr "Mail"
+
+msgid "Mail details"
+msgstr "Détails de l'e-mail"
+
+msgid "Mail message"
+msgstr ""
+
+msgid "Mail messages"
+msgstr ""
+
+msgid "Mail source"
+msgstr ""
+
+msgid "Mail sources"
+msgstr "Boîtes mail"
+
+msgid "Mailbox"
+msgstr "Boîte"
+
+msgid "Mailbox folder"
+msgstr "Dossier de la boîte"
+
+msgid "Mails"
+msgstr "E-mails"
+
+msgid "Match"
+msgstr "Correspondance"
+
+msgid "Match date"
+msgstr ""
+
+msgid "Match type"
+msgstr "Type de correspondance"
+
+msgid "Message-ID"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "New rule"
+msgstr "Nouvelle règle"
+
+msgid "New source"
+msgstr "Nouvelle boîte"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "No mails match the current filters."
+msgstr "Aucun e-mail ne correspond aux filtres actuels."
+
+msgid "No rules configured yet."
+msgstr "Aucune règle configurée pour l'instant."
+
+msgid "No sources configured yet."
+msgstr "Aucune boîte configurée pour l'instant."
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Read by me"
+msgstr ""
+
+msgid "Regular expression"
+msgstr "Expression régulière"
+
+msgid "Reset"
+msgstr "Réinitialiser"
+
+msgid "Rule"
+msgstr "Règle"
+
+msgid "Rule match"
+msgstr ""
+
+msgid "Rule matches"
+msgstr ""
+
+msgid "Rules"
+msgstr "Règles"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Sender"
+msgstr "Expéditeur"
+
+msgid "Sender contains"
+msgstr "L'expéditeur contient"
+
+msgid ""
+"Show or hide columns. Reorder by dragging the column headers; widths "
+"persist."
+msgstr ""
+"Afficher ou masquer les colonnes. Réordonnez en faisant glisser les en-têtes"
+" ; les largeurs sont conservées."
+
+msgid "Source"
+msgstr ""
+
+msgid "Subject"
+msgstr "Objet"
+
+msgid "Subject contains"
+msgstr "L'objet contient"
+
+msgid "Target field"
+msgstr "Champ cible"
+
+msgid "Test connection"
+msgstr "Tester la connexion"
+
+msgid "Toggle dark mode"
+msgstr "Basculer le mode sombre"
+
+msgid "Unsorted"
+msgstr "Non trié"
+
+msgid "Use SSL/TLS"
+msgstr "SSL/TLS"
+
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "e.g. @company.com"
+msgstr "p. ex. @societe.com"
+
+msgid "e.g. invoice"
+msgstr "p. ex. facture"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "SSL/TLS"
+msgstr "SSL/TLS"
+
+msgid "Refresh period"
+msgstr "Période de rafraîchissement"
+
+msgid "Frequency (m)"
+msgstr "Fréquence (m)"
+
+msgid "m"
+msgstr "m"
+
+msgid "Host"
+msgstr "Hôte"
+
+msgid "empty = keep"
+msgstr "vide = inchangé"
+
+msgid "This field is required."
+msgstr "Ce champ est obligatoire."
+
+msgid "Sorting rules"
+msgstr "Règles de tri"
+
+msgid "Combination"
+msgstr "Combinaison"
+
+msgid "All conditions (AND)"
+msgstr "Toutes les conditions (ET)"
+
+msgid "Any condition (OR)"
+msgstr "Au moins une condition (OU)"
+
+msgid "Negate (NOT)"
+msgstr "Nier (NON)"
+
+msgid "NOT"
+msgstr "NON"
+
+msgid "Conditions"
+msgstr "Conditions"
+
+msgid "Logic"
+msgstr "Logique"
+
+msgid "letters of the conditions"
+msgstr "lettres des conditions"
+
+msgid "Add a condition"
+msgstr "Ajouter une condition"
+
+msgid "Remove this condition"
+msgstr "Retirer cette condition"
+
+msgid "Boolean expression over condition letters, e.g. (A OR B) AND C"
+msgstr ""
+"Expression booléenne sur les lettres des conditions, ex. (A OR B) AND C"
+
+msgid "Invalid logic: %s"
+msgstr "Logique invalide : %s"
+
+msgid "Contains"
+msgstr "Contient"
+
+msgid "Regex"
+msgstr "Regex"
+
+msgid "letters + && || !"
+msgstr "lettres + && || !"
+
+msgid ""
+"Boolean expression over condition letters with && || ! e.g. (A || B) && C"
+msgstr ""
+"Expression booléenne sur les lettres des conditions avec && || ! ex. (A || "
+"B) && C"
+
+msgid "Clear"
+msgstr "Effacer"
+
+msgid "Insert in logic"
+msgstr "Insérer dans la logique"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Mark as read"
+msgstr "Marquer comme lu"
+
+msgid "Send to REST callback"
+msgstr "Envoyer vers un callback REST"
+
+msgid "Add an action"
+msgstr "Ajouter une action"
+
+msgid "A callback URL is required for this action."
+msgstr "Une URL de callback est requise pour cette action."
+
+msgid "Callback URL"
+msgstr "URL de callback"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Apply to existing mails"
+msgstr "Appliquer aux mails existants"
+
+msgid "on save"
+msgstr "à la sauvegarde"
+
+msgid "Remove this action"
+msgstr "Retirer cette action"
+
+msgid "Read"
+msgstr "Lu"
+
+msgid "Callback"
+msgstr "Callback"
+
+msgid "on save, run actions on existing matching mails"
+msgstr ""
+"à la sauvegarde, exécuter les actions sur les mails existants correspondants"

@@ -1,0 +1,56 @@
+{% load i18n query_tags icons %}
+<div class="table-wrapper" data-columns-root>
+  <table class="mails" data-columns-table>
+    <thead>
+      <tr>
+        <th data-col="mailbox" data-col-pinned="first"></th>
+        <th data-col="sender">{% trans "Sender" %}</th>
+        <th data-col="subject">{% trans "Subject" %}</th>
+        <th data-col="date">{% trans "Date" %}</th>
+        <th data-col="rules">{% trans "Rules" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mail in mails %}
+      <tr class="{% if mail.rule_matches.all %}mail-matched{% else %}mail-unsorted{% endif %}"
+          onclick="window.__openMail('{% url 'mails:mail_detail' mail.pk %}')">
+        <td data-col="mailbox" class="cell-mailbox">
+          <span class="source-symbol"
+                style="--source-color: {{ mail.source.color }}; --source-color-dark: {{ mail.source.color_dark }};"
+                title="{{ mail.source.name }}">{% bi_icon mail.source.symbol %}</span>
+        </td>
+        <td data-col="sender">{{ mail.sender|default:"—" }}</td>
+        <td data-col="subject">{{ mail.subject|default:"—" }}</td>
+        <td data-col="date">{% if mail.date %}{{ mail.date|date:"Y-m-d H:i" }}{% else %}—{% endif %}</td>
+        <td data-col="rules">
+          {% for match in mail.rule_matches.all %}
+            <a class="rule-dot" href="{% url 'mails:mail_list' %}?rule={{ match.rule.pk }}"
+               title="{{ match.rule.name }}"
+               style="--dot: {{ match.rule.color }}; --dot-dark: {{ match.rule.color_dark }};"
+               onclick="event.stopPropagation()">{% bi_icon match.rule.symbol %}</a>
+          {% empty %}
+            <span title="{% trans 'Unsorted' %}"></span>
+          {% endfor %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="empty">{% trans "No mails match the current filters." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  {% if page.has_previous %}
+    <a href="?{% querystring_with page=page.previous_page_number %}">« {% trans "Previous" %}</a>
+  {% else %}
+    <span class="disabled">« {% trans "Previous" %}</span>
+  {% endif %}
+  <span class="current">{{ page.number }} / {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}
+    <a href="?{% querystring_with page=page.next_page_number %}">{% trans "Next" %} »</a>
+  {% else %}
+    <span class="disabled">{% trans "Next" %} »</span>
+  {% endif %}
+  <span class="count-info">{% blocktrans count counter=total_count %}{{ counter }} mail{% plural %}{{ counter }} mails{% endblocktrans %}</span>
+</div>

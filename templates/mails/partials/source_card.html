@@ -1,0 +1,86 @@
+{% load i18n icons config_tags %}
+{% for source in sources %}
+      {% with form=source_forms|get_item:source.pk form_fields_hidden="symbol color color_dark" %}
+      <details class="accordion config-item" id="source-{{ source.pk }}">
+        <summary>
+          <span class="source-symbol"
+                style="--source-color: {{ source.color }}; --source-color-dark: {{ source.color_dark }};">{% bi_icon source.symbol %}</span>
+          <span class="accordion-title" data-name-display="{{ source.pk }}">
+            {{ source.name }}
+            <button type="button" class="rename-btn" title="{% trans 'Rename' %}"
+                    onclick="startRename({{ source.pk }}, this)">{% bi_icon "pencil" %}</button>
+          </span>
+          <span class="summary-frequency" title="{% trans 'Refresh period' %}">{{ source.fetch_frequency }} {% trans "m" %}</span>
+          <button type="button" class="summary-switch {% if source.enabled %}on{% endif %}"
+                  role="switch" aria-checked="{{ source.enabled|yesno:'true,false' }}"
+                  title="{% if source.enabled %}{% trans 'Enabled' %}{% else %}{% trans 'Disabled' %}{% endif %}"
+                  hx-post="{% url 'mails:source_toggle' source.pk %}"
+                  hx-target="closest details"
+                  hx-swap="outerHTML"
+                  onclick="event.preventDefault(); event.stopPropagation();">
+          </button>
+          <span class="accordion-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="accordion-body">
+          <form class="inline-edit-form"
+                hx-post="{% url 'mails:source_update' source.pk %}"
+                hx-target="closest details"
+                hx-swap="outerHTML">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% with source=form.instance %}
+            <div class="inline-fields">
+              {{ form.name.as_hidden }}
+              <label class="inline-field required span-6">
+                <span class="inline-label">{{ form.host.label }}</span>
+                {{ form.host }}
+              </label>
+              <div class="inline-field span-3">
+                <span class="inline-label">{{ form.port.label }}</span>
+                {{ form.port }}
+              </div>
+              <div class="inline-field span-3 switch-field">
+                <span class="inline-label">{{ form.use_ssl.label }}</span>
+                {{ form.use_ssl }}
+              </div>
+              <label class="inline-field required span-6">
+                <span class="inline-label">{{ form.username.label }}</span>
+                {{ form.username }}
+              </label>
+              <label class="inline-field required span-6">
+                <span class="inline-label">{{ form.password.label }} <span class="picker-hint">({% trans "empty = keep" %})</span></span>
+                {{ form.password }}
+              </label>
+              <label class="inline-field required span-12">
+                <span class="inline-label">{{ form.folder.label }}</span>
+                {{ form.folder }}
+              </label>
+              {{ form.symbol.as_hidden }}
+              {{ form.color.as_hidden }}
+              {{ form.color_dark.as_hidden }}
+              {{ form.fetch_frequency.as_hidden }}
+            </div>
+            {% endwith %}
+            <div class="inline-actions">
+              <button type="submit" class="btn small">{% trans "Save" %}</button>
+              <button type="button" class="btn small"
+                      hx-post="{% url 'mails:source_test' source.pk %}"
+                      hx-target="#test-result-{{ source.pk }}"
+                      hx-swap="innerHTML">
+                {% trans "Test connection" %}
+              </button>
+              <button type="button" class="btn danger small"
+                      hx-post="{% url 'mails:source_delete' source.pk %}"
+                      hx-confirm="{% trans 'Delete this source and all its mails?' %}"
+                      hx-target="#config-body"
+                      hx-swap="outerHTML">
+                {% trans "Delete" %}
+              </button>
+              <span id="test-result-{{ source.pk }}"></span>
+            </div>
+          {% include "mails/partials/symbol_picker.html" with picker_id=source.pk form=form %}
+          </form>
+        </div>
+      </details>
+{% endwith %}
+{% endfor %}

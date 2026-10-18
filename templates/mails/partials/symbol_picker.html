@@ -1,0 +1,25 @@
+{% load i18n icons %}
+<div class="picker" id="symbol-picker-{{ picker_id }}"
+     data-picker-for="{{ form.symbol.id_for_label }}"
+     data-color-picker-id="color-picker-{{ picker_id }}">
+  {% for sym in source_symbols %}
+  <button type="button" class="picker-item symbol-pair"
+          data-value="{{ sym }}"
+          title="{{ sym }}"
+          onclick="pickSymbol(this)"><span
+            class="icon-light">{% bi_icon sym %}</span><span
+            class="icon-dark">{% bi_icon sym %}</span></button>
+  {% endfor %}
+</div>
+<div class="picker" id="color-picker-{{ picker_id }}"
+     data-picker-for="{{ form.color.id_for_label }}"
+     data-picker-for-dark="{{ form.color_dark.id_for_label }}">
+  {% for pair in source_colors %}
+  <button type="button" class="picker-item color-pair"
+          data-value="{{ pair.0 }}" data-value-dark="{{ pair.1 }}"
+          title="{{ pair.0 }} / {{ pair.1 }}"
+          onclick="pickColor(this)"><span
+            class="swatch swatch-light" style="background: {{ pair.0 }};"></span><span
+            class="swatch swatch-dark" style="background: {{ pair.1 }};"></span></button>
+  {% endfor %}
+</div>
