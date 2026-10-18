@@ -1,0 +1,95 @@
+{% load i18n icons config_tags %}
+{% for rule in rules %}
+{% with form=rule_forms|get_item:rule.pk condition_forms=rule_condition_forms|get_item:rule.pk action_forms=rule_action_forms|get_item:rule.pk %}
+<details class="accordion config-item" id="rule-{{ rule.pk }}">
+  <summary>
+    <span class="source-symbol rule-symbol"
+          style="--source-color: {{ rule.color }}; --source-color-dark: {{ rule.color_dark }};">{% bi_icon rule.symbol %}</span>
+    <span class="accordion-title" data-rule-name-display="{{ rule.pk }}">
+      {{ rule.name }}
+      <button type="button" class="rename-btn" title="{% trans 'Rename' %}"
+              onclick="startRuleRename({{ rule.pk }}, this)">{% bi_icon "pencil" %}</button>
+    </span>
+    <button type="button" class="summary-switch {% if rule.enabled %}on{% endif %}"
+            role="switch" aria-checked="{{ rule.enabled|yesno:'true,false' }}"
+            title="{% if rule.enabled %}{% trans 'Enabled' %}{% else %}{% trans 'Disabled' %}{% endif %}"
+            hx-post="{% url 'mails:rule_toggle' rule.pk %}"
+            hx-target="closest details"
+            hx-swap="outerHTML"
+            onclick="event.preventDefault(); event.stopPropagation();">
+    </button>
+    <span class="accordion-chevron" aria-hidden="true"></span>
+  </summary>
+  <div class="accordion-body">
+    <form class="inline-edit-form"
+          hx-post="{% url 'mails:rule_update' rule.pk %}"
+          hx-target="closest details"
+          hx-swap="outerHTML">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {{ form.name.as_hidden }}
+      {{ form.symbol.as_hidden }}
+      {{ form.color.as_hidden }}
+      {{ form.color_dark.as_hidden }}
+      <div class="logic-builder" data-count-url="{% url 'mails:rule_count' rule.pk %}">
+        <div class="logic-buttons">
+                              <button type="button" class="btn small logic-btn" data-insert="&&">&amp;&amp;</button>          <button type="button" class="btn small logic-btn" data-insert="||">||</button>          <button type="button" class="btn small logic-btn" data-insert="!">!</button>          <button type="button" class="btn small logic-btn" data-insert="(">(</button>          <button type="button" class="btn small logic-btn" data-insert=")">)</button>
+
+        </div>
+        <div class="logic-input-row">
+          {{ form.logic_expr }}
+          <span class="logic-count badge neutral" data-count>{{ rule.mail_count }}</span>
+          <button type="button" class="logic-clear" title="{% trans 'Clear' %}">✕</button>
+        </div>
+        {% if form.logic_expr.errors %}<span class="error-message">{{ form.logic_expr.errors.0 }}</span>{% endif %}
+      </div>
+      <label class="inline-field span-12 switch-field apply-existing">
+        <span class="inline-label">{{ form.apply_to_existing.label }}
+          <span class="picker-hint">({% trans "on save, run actions on existing matching mails" %})</span></span>
+        {{ form.apply_to_existing }}
+      </label>
+      {% include "mails/partials/sender_suggestions.html" %}
+      {{ condition_forms.management_form }}
+      <div class="conditions-list" data-conditions>
+        {% for condition in condition_forms %}
+        <div class="condition-row">
+          {{ condition.id }}
+          <button type="button" class="condition-letter logic-btn"
+                  data-insert="{{ forloop.counter|letter }}"
+                  title="{% trans 'Insert in logic' %}">{{ forloop.counter|letter }}</button>
+          <div class="inline-field cond-field">
+            {{ condition.target_field }}
+          </div>
+          <div class="inline-field cond-field">
+            {{ condition.match_type }}
+          </div>
+          <label class="inline-field cond-value">
+            {{ condition.value }}
+            {% if condition.value.errors %}<span class="error-message">{{ condition.value.errors.0 }}</span>{% endif %}
+          </label>
+          <button type="button" class="btn danger small cond-remove"
+                  onclick="removeCondition(this)"
+                  title="{% trans 'Remove this condition' %}">−</button>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="button" class="btn small cond-add"
+              onclick="addCondition(this, 'rule-{{ rule.pk }}-conditions')">+
+        {% trans "Add a condition" %}</button>
+      {% include "mails/partials/rule_actions.html" with formset=action_forms %}
+      {% include "mails/partials/symbol_picker.html" with picker_id=rule.pk|prepend:"r-" form=form %}
+      <div class="inline-actions">
+        <button type="submit" class="btn small">{% trans "Save" %}</button>
+        <button type="button" class="btn danger small"
+                hx-post="{% url 'mails:rule_delete' rule.pk %}"
+                hx-confirm="{% trans 'Delete this rule?' %}"
+                hx-target="#config-body"
+                hx-swap="outerHTML">
+          {% trans "Delete" %}
+        </button>
+      </div>
+    </form>
+  </div>
+</details>
+{% endwith %}
+{% endfor %}

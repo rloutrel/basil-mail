@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Configuration" %} — Basil{% endblock %}
+
+{% block content %}
+<h1>{% trans "Configuration" %}</h1>
+{% include "mails/partials/config_body.html" %}
+{% endblock %}
