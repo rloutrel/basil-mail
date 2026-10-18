@@ -1,0 +1,52 @@
+{% load i18n %}
+<form class="filters" id="mail-filters"
+      hx-get="{% url 'mails:mail_table' %}"
+      hx-target="#mail-table"
+      hx-swap="innerHTML"
+      hx-push-url="{% url 'mails:mail_list' %}">
+  <label>
+    {% trans "Rule" %}
+    <select name="rule" onchange="syncFilters()">
+      <option value="">{% trans "All rules" %}</option>
+      <option value="unsorted" {% if filters.rule == 'unsorted' %}selected{% endif %}>{% trans "Unsorted" %}</option>
+      {% for rule in rules %}
+        <option value="{{ rule.pk }}" {% if filters.rule == rule.pk|stringformat:"s" %}selected{% endif %}>{{ rule.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    {% trans "Mailbox" %}
+    <select name="source" onchange="syncFilters()">
+      <option value="">{% trans "All mailboxes" %}</option>
+      {% for source in sources %}
+        <option value="{{ source.pk }}" {% if filters.source == source.pk|stringformat:"s" %}selected{% endif %}>{{ source.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    {% trans "Sender contains" %}
+    <input type="text" name="sender" value="{{ filters.sender }}" placeholder="{% trans 'e.g. @company.com' %}"
+           oninput="syncFiltersDebounced()">
+  </label>
+  <label>
+    {% trans "Subject contains" %}
+    <input type="text" name="subject" value="{{ filters.subject }}" placeholder="{% trans 'e.g. invoice' %}"
+           oninput="syncFiltersDebounced()">
+  </label>
+  <button type="submit" class="btn small">{% trans "Apply" %}</button>
+  <a class="btn secondary small" href="{% url 'mails:mail_list' %}">{% trans "Reset" %}</a>
+</form>
+
+<script>
+  // Keep a single source of truth: HTMX triggers on the form's own inputs.
+  var syncTimer = null;
+  function syncFilters() {
+    document.getElementById('mail-filters').dispatchEvent(
+      new Event('submit', { bubbles: true })
+    );
+  }
+  function syncFiltersDebounced() {
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(syncFilters, 400);
+  }
+</script>

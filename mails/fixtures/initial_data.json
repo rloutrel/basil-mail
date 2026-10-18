@@ -1,0 +1,56 @@
+[
+  {
+    "model": "mails.mailsource",
+    "pk": 1,
+    "fields": {
+      "name": "Personal mailbox",
+      "host": "imap.example.com",
+      "port": 993,
+      "use_ssl": true,
+      "username": "user@example.com",
+      "password": "change-me",
+      "folder": "INBOX",
+      "fetch_frequency": 15,
+      "enabled": true,
+      "last_fetch_at": null
+    }
+  },
+  {
+    "model": "mails.collectrule",
+    "pk": 1,
+    "fields": {
+      "name": "Job offers",
+      "enabled": true,
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "mails.collectrule",
+    "pk": 2,
+    "fields": {
+      "name": "Personal mail",
+      "enabled": true,
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "mails.rulecondition",
+    "pk": 3,
+    "fields": {
+      "rule": 1,
+      "target_field": "subject",
+      "match_type": "regex",
+      "value": "(?i)(job|offer|position|vacancy)"
+    }
+  },
+  {
+    "model": "mails.rulecondition",
+    "pk": 4,
+    "fields": {
+      "rule": 2,
+      "target_field": "sender",
+      "match_type": "regex",
+      "value": "@(family|friends)\\.example$"
+    }
+  }
+]

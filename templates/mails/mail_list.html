@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div x-data="mailPage()" @basil:open-mail.window="openMail($event.detail)">
+  <div class="page-header" style="display:flex; align-items:center; gap:1rem;">
+    <h1>{% trans "Mails" %}</h1>
+    <form hx-post="{% url 'mails:fetch_now' %}" hx-swap="none" class="inline-form">
+      {% csrf_token %}
+      <button type="submit" class="btn" onclick="showFetchFeedback(this)">
+        {% trans "Fetch now" %}
+      </button>
+    </form>
+    <span id="fetch-feedback" class="htmx-indicator" style="color: var(--text-muted);">{% trans "Fetch started…" %}</span>
+  </div>
+
+  {% include "mails/partials/filters.html" %}
+
+  <div class="table-toolbar">
+    <div class="col-manager" data-col-root>
+      <button type="button" class="btn secondary small" data-col-button>☰ {% trans "Columns" %}</button>
+      <div class="col-panel" data-col-panel>
+        <p class="col-panel-hint">{% trans "Show or hide columns. Reorder by dragging the column headers; widths persist." %}</p>
+        <ul class="col-menu" data-col-menu></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="mail-table" hx-boost="false">
+    {% include "mails/partials/mail_table.html" %}
+  </div>
+
+  {% include "mails/partials/modal.html" %}
+</div>
+
+<script>
+  function mailPage() {
+    return {
+      modalOpen: false,
+      modalUrl: '',
+      openMail(url) {
+        this.modalUrl = url;
+        this.modalOpen = true;
+        fetch(url)
+          .then(r => r.text())
+          .then(html => { this.$refs.modalContent.innerHTML = html; });
+      },
+      closeMail() {
+        this.modalOpen = false;
+        this.modalUrl = '';
+        this.$refs.modalContent.innerHTML = '';
+      }
+    };
+  }
+  window.__openMail = function (url) {
+    document.dispatchEvent(new CustomEvent('basil:open-mail', { detail: url }));
+  };
+  function showFetchFeedback(btn) {
+    var fb = document.getElementById('fetch-feedback');
+    fb.style.display = 'inline';
+    setTimeout(function () { fb.style.display = 'none'; }, 4000);
+  }
+</script>
+{% endblock %}
