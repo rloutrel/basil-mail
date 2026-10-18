@@ -1,0 +1,88 @@
+{% load i18n static language_tags %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% trans "Mails" %} — Basil{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <script>
+    (function () {
+      var theme = localStorage.getItem("basil-theme");
+      if (!theme) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <script>
+    document.addEventListener("htmx:configRequest", function (evt) {
+      var cookie = document.cookie.split("; ").find(function (c) {
+        return c.startsWith("csrftoken=");
+      });
+      if (cookie) {
+        evt.detail.headers["X-CSRFToken"] = cookie.split("=")[1];
+      }
+    });
+  </script>
+  <script defer src="https://unpkg.com/alpinejs@3.14.9/dist/cdn.min.js"></script>
+  <script src="{% static 'js/columns.js' %}" defer></script>
+  <script src="{% static 'js/pickers.js' %}" defer></script>
+  <script>
+    function onLanguageChange(code) {
+      try { localStorage.setItem("basil-language", code); } catch (e) {}
+      document.getElementById("lang-form").submit();
+    }
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("basil-language"); } catch (e) {}
+      var current = document.documentElement.lang || "";
+      if (!saved) {
+        try { localStorage.setItem("basil-language", current); } catch (e) {}
+      }
+    })();
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="brand" href="{% url 'mails:mail_list' %}">Basil <span class="brand-mail">{% trans "Mail" %}</span></a>
+    <div class="nav-links">
+      <a href="{% url 'mails:mail_list' %}" {% if request.resolver_match.url_name == 'mail_list' %}class="active"{% endif %}>{% trans "Mails" %}</a>
+      <a href="{% url 'mails:config' %}" {% if request.resolver_match.url_name == 'config' %}class="active"{% endif %}>{% trans "Configuration" %}</a>
+    </div>
+    <form class="lang-form" action="{% url 'set_language' %}" method="post" id="lang-form">
+      {% csrf_token %}
+      <input name="next" type="hidden" value="{{ request.get_full_path }}">
+      <select name="language" id="lang-select"
+              aria-label="{% trans 'Language' %}"
+              onchange="onLanguageChange(this.value)">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for lang in languages %}
+          <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %} title="{{ lang.name_local }}">{% language_flag lang.code %}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <button class="theme-toggle" onclick="toggleTheme(this)"
+            aria-label="{% trans 'Toggle dark mode' %}" title="{% trans 'Toggle dark mode' %}">🌙</button>
+  </nav>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <script>
+    function toggleTheme(btn) {
+      var current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+      var next = current === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("basil-theme", next);
+      btn.textContent = next === "dark" ? "🌙" : "☀️";
+    }
+    var initTheme = document.documentElement.dataset.theme;
+    document.addEventListener("DOMContentLoaded", function () {
+      var btn = document.querySelector(".theme-toggle");
+      if (btn) { btn.textContent = initTheme === "dark" ? "🌙" : "☀️"; }
+    });
+  </script>
+</body>
+</html>

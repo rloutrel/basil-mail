@@ -1,0 +1,9 @@
+{% load i18n %}
+<div class="modal-backdrop" x-show="modalOpen" x-cloak @click.self="closeMail()"
+     @keydown.escape.window="closeMail()" role="dialog" aria-modal="true" aria-label="{% trans 'Mail details' %}">
+  <div class="modal" @click.stop>
+    <button class="btn secondary small close-btn" @click="closeMail()" aria-label="{% trans 'Close' %}">✕</button>
+    <div style="margin-top: 1.5rem;" x-ref="modalContent"></div>
+  </div>
+</div>
+<style>[x-cloak]{display:none!important}</style>

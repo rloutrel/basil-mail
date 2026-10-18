@@ -1,0 +1,4 @@
+{% load i18n %}
+<span class="test-result {{ status_class }}">
+  {% if status_class == 'ok' %}✔{% else %}✘{% endif %} {{ message }}
+</span>

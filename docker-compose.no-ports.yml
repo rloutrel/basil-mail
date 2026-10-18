@@ -1,0 +1,10 @@
+# Override that removes the web port mapping entirely (published port
+# left empty), for use behind a reverse proxy (e.g. nginx) on an internal
+# Docker network. Requires Docker Compose v2.24+.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.no-ports.yml up -d
+# or:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.no-ports.yml docker compose up -d
+services:
+  web:
+    ports: !reset []
