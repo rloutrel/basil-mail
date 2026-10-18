@@ -1,0 +1,25 @@
+{% load i18n config_tags %}
+<div class="actions-block">
+  {{ formset.management_form }}
+  <div class="actions-list" data-actions>
+    {% for action in formset %}
+    <div class="action-row">
+      {{ action.id }}
+      <div class="inline-field act-type">
+        {{ action.action_type }}
+        {% if action.action_type.errors %}<span class="error-message">{{ action.action_type.errors.0 }}</span>{% endif %}
+      </div>
+      <label class="inline-field act-url">
+        {{ action.callback_url }}
+        {% if action.callback_url.errors %}<span class="error-message">{{ action.callback_url.errors.0 }}</span>{% endif %}
+      </label>
+      {% if action.non_field_errors %}<span class="error-message">{{ action.non_field_errors.0 }}</span>{% endif %}
+      <button type="button" class="btn danger small act-remove"
+              onclick="removeAction(this)"
+              title="{% trans 'Remove this action' %}">−</button>
+    </div>
+    {% endfor %}
+  </div>
+  <button type="button" class="btn small act-add"
+          onclick="addAction(this)">+ {% trans "Add an action" %}</button>
+</div>

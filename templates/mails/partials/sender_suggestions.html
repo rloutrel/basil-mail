@@ -1,0 +1,4 @@
+{% load i18n %}
+<datalist id="sender-suggestions">
+  {% for sender in sender_suggestions %}{% if sender %}<option value="{{ sender }}"></option>{% endif %}{% endfor %}
+</datalist>
