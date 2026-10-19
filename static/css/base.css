@@ -128,6 +128,18 @@ tr.mail-unsorted td:first-child { border-left: 3px solid var(--border); }
 .badge.status::before { content: "◆"; margin-right: 0.3rem; }
 tr.mail-unsorted .badge.status::before { content: "◇"; }
 
+/* Rule matching-mail count pill: blue, more visible */
+.badge.count {
+  background: #1f6fb2;
+  color: #ffffff;
+  border: 1px solid #1f6fb2;
+  font-weight: 600;
+}
+html[data-theme="dark"] .badge.count {
+  background: #74b3ef;
+  color: #10241a;
+  border: 1px solid #74b3ef;
+}
 .sort-icon::after { content: ""; }
 
 /* Pagination */

@@ -28,7 +28,7 @@
       </div>
       <div class="logic-input-row">
         {{ form.logic_expr }}
-        <span class="logic-count badge neutral" data-count hidden></span>
+        <span class="logic-count badge count" data-count hidden></span>
         <button type="button" class="logic-clear" title="{% trans 'Clear' %}">✕</button>
       </div>
       {% if form.logic_expr.errors %}<span class="error-message">{{ form.logic_expr.errors.0 }}</span>{% endif %}
