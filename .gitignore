@@ -6,4 +6,3 @@ staticfiles/
 db.sqlite3
 /.pgdata/
 /.pg/
-.idea/
