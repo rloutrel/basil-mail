@@ -306,6 +306,20 @@ class ConfigViewTests(TestCase):
         self.assertIn("color-picker", html)
         self.assertIn("icon-light", html)
 
+    def test_source_form_name_in_summary_like_existing_cards(self):
+        response = self.client.get(reverse("mails:source_create"))
+        html = response.content.decode()
+        self.assertIn('id="source-new"', html)
+        summary = html.split("<summary>", 1)[1].split("</summary>", 1)[0]
+        self.assertIn('name="source-new-name"', summary)
+        self.assertIn('form="source-new-form"', summary)
+        self.assertIn("accordion-chevron", summary)
+        self.assertIn('<form id="source-new-form"', html)
+        self.assertNotIn(
+            '<span class="inline-label">Name</span>',
+            html.split("</summary>", 1)[1],
+        )
+
     def test_source_create_defaults_symbol_and_color(self):
         url = reverse("mails:source_create")
         response = self.client.post(url, {

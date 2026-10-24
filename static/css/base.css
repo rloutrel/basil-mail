@@ -373,6 +373,12 @@ html[data-theme="dark"] .source-symbol {
 .inline-field .errorlist, .inline-field .error-message { color: var(--error); font-size: 0.85rem; margin: 0; }
 .inline-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .inline-new { margin-bottom: 0.8rem; }
+.inline-new-title { display: flex; flex-direction: column; gap: 0.2rem; }
+.inline-new-title input {
+  width: 100%; background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.35rem 0.5rem; font-weight: 600;
+}
 #config-body .picker { margin: 0.3rem 0 0.6rem; }
 #config-body details.accordion.config-item .form-card { margin-top: 0.6rem; }
 .inline-edit-form .errorlist, .inline-new .errorlist {
