@@ -1,53 +1,73 @@
 {% load i18n icons %}
-<div class="form-card accordion inline-new" id="source-new" open>
-  <form hx-post="{% url 'mails:source_create' %}"
-        hx-target="#config-body"
-        hx-swap="outerHTML">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="inline-fields">
-      <label class="inline-field required span-6">
-        <span class="inline-label">{{ form.name.label }}</span>
-        {{ form.name }}
-        {% if form.name.errors %}<span class="error-message">{{ form.name.errors.0 }}</span>{% endif %}
-      </label>
-      <label class="inline-field required span-6">
-        <span class="inline-label">{{ form.host.label }}</span>
-        {{ form.host }}
-        {% if form.host.errors %}<span class="error-message">{{ form.host.errors.0 }}</span>{% endif %}
-      </label>
-      <div class="inline-field span-3">
-        <span class="inline-label">{{ form.port.label }}</span>
-        {{ form.port }}
+<details class="accordion config-item inline-new" id="source-new" open>
+  <summary>
+    <span class="source-symbol"
+          style="--source-color: {{ form.color.value|default:'#2f6f4f' }}; --source-color-dark: {{ form.color_dark.value|default:'#6fbf8f' }};">{% bi_icon "envelope" %}</span>
+    <span class="accordion-title inline-new-title">
+      <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}"
+             form="source-new-form" required
+             placeholder="{{ form.name.label }}"
+             value="{{ form.name.value|default:'' }}"
+             onclick="event.preventDefault()">
+      {% if form.name.errors %}<span class="error-message">{{ form.name.errors.0 }}</span>{% endif %}
+    </span>
+    <span class="accordion-chevron" aria-hidden="true"></span>
+  </summary>
+  <div class="accordion-body">
+    <form id="source-new-form"
+          hx-post="{% url 'mails:source_create' %}"
+          hx-target="#config-body"
+          hx-swap="outerHTML">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="inline-fields">
+        <label class="inline-field required span-6">
+          <span class="inline-label">{{ form.host.label }}</span>
+          {{ form.host }}
+          {% if form.host.errors %}<span class="error-message">{{ form.host.errors.0 }}</span>{% endif %}
+        </label>
+        <div class="inline-field span-3">
+          <span class="inline-label">{{ form.port.label }}</span>
+          {{ form.port }}
+        </div>
+        <div class="inline-field span-3 switch-field">
+          <span class="inline-label">{{ form.use_ssl.label }}</span>
+          {{ form.use_ssl }}
+        </div>
+        <label class="inline-field required span-6">
+          <span class="inline-label">{{ form.username.label }}</span>
+          {{ form.username }}
+          {% if form.username.errors %}<span class="error-message">{{ form.username.errors.0 }}</span>{% endif %}
+        </label>
+        <label class="inline-field required span-6">
+          <span class="inline-label">{{ form.password.label }} <span class="picker-hint">({% trans "empty = keep" %})</span></span>
+          {{ form.password }}
+          {% if form.password.errors %}<span class="error-message">{{ form.password.errors.0 }}</span>{% endif %}
+        </label>
+        <label class="inline-field required span-12">
+          <span class="inline-label">{{ form.folder.label }}</span>
+          {{ form.folder }}
+        </label>
+        {{ form.symbol.as_hidden }}
+        {{ form.color.as_hidden }}
+        {{ form.color_dark.as_hidden }}
+        {{ form.fetch_frequency.as_hidden }}
       </div>
-      <div class="inline-field span-3 switch-field">
-        <span class="inline-label">{{ form.use_ssl.label }}</span>
-        {{ form.use_ssl }}
+      <div class="inline-actions">
+        <button type="submit" class="btn small">{% trans "Save" %}</button>
+        <button type="button" class="btn small"
+                name="source-new-test"
+                hx-post="{% url 'mails:source_test_new' %}"
+                hx-include="closest form"
+                hx-target="#test-result-new"
+                hx-swap="innerHTML">
+          {% trans "Test connection" %}
+        </button>
+        <button type="button" class="btn secondary small"
+                onclick="this.closest('#source-form-slot').innerHTML=''">{% trans "Cancel" %}</button>
+        <span id="test-result-new"></span>
       </div>
-      <label class="inline-field required span-6">
-        <span class="inline-label">{{ form.username.label }}</span>
-        {{ form.username }}
-        {% if form.username.errors %}<span class="error-message">{{ form.username.errors.0 }}</span>{% endif %}
-      </label>
-      <label class="inline-field required span-6">
-        <span class="inline-label">{{ form.password.label }} <span class="picker-hint">({% trans "empty = keep" %})</span></span>
-        {{ form.password }}
-        {% if form.password.errors %}<span class="error-message">{{ form.password.errors.0 }}</span>{% endif %}
-      </label>
-      <label class="inline-field required span-12">
-        <span class="inline-label">{{ form.folder.label }}</span>
-        {{ form.folder }}
-      </label>
-      {{ form.symbol.as_hidden }}
-      {{ form.color.as_hidden }}
-      {{ form.color_dark.as_hidden }}
-      {{ form.fetch_frequency.as_hidden }}
-    </div>
-    {% include "mails/partials/symbol_picker.html" with picker_id="new" form=form %}
-    <div class="inline-actions">
-      <button type="submit" class="btn small">{% trans "Save" %}</button>
-      <button type="button" class="btn secondary small"
-              onclick="this.closest('#source-form-slot').innerHTML=''">{% trans "Cancel" %}</button>
-    </div>
-  </form>
-</div>
+      {% include "mails/partials/symbol_picker.html" with picker_id="new" form=form %}
+    </form>
+  </div>
+</details>

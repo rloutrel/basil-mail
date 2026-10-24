@@ -159,6 +159,23 @@ class MailListViewTests(TestCase):
         self.assertContains(response, "Read https://example.com/article")
         self.assertContains(response, 'href="https://example.com/article"')
 
+    def test_mail_table_rows_expand_with_secondary_detail_row(self):
+        response = self.client.get(reverse("mails:mail_table"))
+        html = response.content.decode()
+        self.assertIn("toggleMailRow(%d)" % self.m1.pk, html)
+        self.assertIn('id="mail-row-%d"' % self.m1.pk, html)
+        self.assertIn('data-mail-url="/mails/%d/"' % self.m1.pk, html)
+        self.assertIn('id="mail-detail-%d"' % self.m1.pk, html)
+        self.assertIn('id="mail-body-%d"' % self.m1.pk, html)
+        self.assertIn('hidden', html)
+        self.assertNotIn("__openMail", html)
+        self.assertNotIn("modal", html)
+
+    def test_mail_detail_row_content_has_no_subject_heading(self):
+        response = self.client.get(reverse("mails:mail_detail", args=[self.m3.pk]))
+        self.assertNotContains(response, "<h2>")
+        self.assertContains(response, "mail-detail-body")
+
     def test_fetch_now_returns_202(self):
         response = self.client.post(reverse("mails:fetch_now"))
         self.assertEqual(response.status_code, 202)
@@ -289,6 +306,20 @@ class ConfigViewTests(TestCase):
         self.assertIn("color-picker", html)
         self.assertIn("icon-light", html)
 
+    def test_source_form_name_in_summary_like_existing_cards(self):
+        response = self.client.get(reverse("mails:source_create"))
+        html = response.content.decode()
+        self.assertIn('id="source-new"', html)
+        summary = html.split("<summary>", 1)[1].split("</summary>", 1)[0]
+        self.assertIn('name="source-new-name"', summary)
+        self.assertIn('form="source-new-form"', summary)
+        self.assertIn("accordion-chevron", summary)
+        self.assertIn('<form id="source-new-form"', html)
+        self.assertNotIn(
+            '<span class="inline-label">Name</span>',
+            html.split("</summary>", 1)[1],
+        )
+
     def test_source_create_defaults_symbol_and_color(self):
         url = reverse("mails:source_create")
         response = self.client.post(url, {
@@ -302,6 +333,43 @@ class ConfigViewTests(TestCase):
         source = MailSource.objects.get(name="NoSymbol")
         self.assertEqual(source.symbol, "envelope")
         self.assertEqual(source.color, "#2f6f4f")
+
+    def test_source_create_form_shows_test_connection_button(self):
+        response = self.client.get(reverse("mails:source_create"))
+        self.assertContains(response, "Test connection")
+        self.assertContains(response, reverse("mails:source_test_new"))
+        self.assertContains(response, "test-result-new")
+
+    def test_source_test_new_connection_success(self):
+        from unittest import mock
+        from mails.tests.test_imap import FakeIMAP
+        with mock.patch("imaplib.IMAP4_SSL", return_value=FakeIMAP([])):
+            response = self.client.post(reverse("mails:source_test_new"), {
+                "source-new-name": "New", "source-new-host": "imap.example.com",
+                "source-new-port": 993, "source-new-use_ssl": "on",
+                "source-new-username": "u", "source-new-password": "p",
+                "source-new-folder": "INBOX", "source-new-fetch_frequency": 10,
+            })
+        self.assertContains(response, "Connection succeeded")
+        self.assertContains(response, "test-result ok")
+        self.assertFalse(MailSource.objects.filter(name="New").exists())
+
+    def test_source_test_new_connection_failure(self):
+        from unittest import mock
+        with mock.patch("imaplib.IMAP4_SSL", side_effect=OSError("refused")):
+            response = self.client.post(reverse("mails:source_test_new"), {
+                "source-new-name": "New", "source-new-host": "imap.example.com",
+                "source-new-port": 993, "source-new-use_ssl": "on",
+                "source-new-username": "u", "source-new-password": "p",
+                "source-new-folder": "INBOX", "source-new-fetch_frequency": 10,
+            })
+        self.assertContains(response, "Connection failed")
+        self.assertContains(response, "refused")
+
+    def test_source_test_new_invalid_form(self):
+        response = self.client.post(reverse("mails:source_test_new"), {})
+        self.assertContains(response, "Fix the form errors first")
+        self.assertContains(response, "test-result error")
 
     def test_source_create_with_symbol_and_color(self):
         url = reverse("mails:source_create")

@@ -1,18 +1,9 @@
 {% load i18n icons %}
-<h2>{{ mail.subject|default:"(no subject)" }}</h2>
-<div class="modal-meta">
-  <p><strong>{% trans "Mailbox" %}:</strong> {{ mail.source.name }} — <strong>{% trans "Sender" %}:</strong> {{ mail.sender|default:"—" }}</p>
-  <p><strong>{% trans "Date" %}:</strong> {% if mail.date %}{{ mail.date|date:"Y-m-d H:i" }}{% else %}—{% endif %}
-     — <strong>{% trans "Rules" %}:</strong>
-    {% for match in mail.rule_matches.all %}
-      <a class="rule-dot" href="{% url 'mails:mail_list' %}?rule={{ match.rule.pk }}"
-         title="{{ match.rule.name }}"
-         style="--dot: {{ match.rule.color }}; --dot-dark: {{ match.rule.color_dark }};">{% bi_icon match.rule.symbol %}</a>
-    {% empty %}
-      <span title="{% trans 'Unsorted' %}"></span>
-    {% endfor %}</p>
+<div class="mail-detail-meta">
+  <p><strong>{% trans "Mailbox" %}:</strong> {{ mail.source.name }} — <strong>{% trans "Sender" %}:</strong> {{ mail.sender|default:"—" }}
+     — <strong>{% trans "Date" %}:</strong> {% if mail.date %}{{ mail.date|date:"Y-m-d H:i" }}{% else %}—{% endif %}</p>
   {% if mail.link %}
   <p><strong>{% trans "Link" %}:</strong> <a href="{{ mail.link }}" target="_blank" rel="noopener noreferrer">{{ mail.link }}</a></p>
   {% endif %}
 </div>
-<div class="modal-body">{{ mail.body }}</div>
+<div class="mail-detail-body">{{ mail.body }}</div>

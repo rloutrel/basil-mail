@@ -157,20 +157,11 @@ html[data-theme="dark"] .badge.count {
 
 .count-info { color: var(--text-muted); font-size: 0.9rem; margin-left: auto; }
 
-/* Modal */
-.modal-backdrop {
-  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
-  display: flex; align-items: flex-start; justify-content: center;
-  padding: 3rem 1rem; z-index: 50; overflow-y: auto;
-}
-.modal {
-  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-  box-shadow: var(--shadow); max-width: 720px; width: 100%; padding: 1.2rem 1.5rem;
-}
-.modal h2 { margin-top: 0; font-size: 1.1rem; }
-.modal .close-btn { float: right; }
-.modal-meta { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
-.modal-body {
+/* Inline mail detail row */
+tr.mail-detail-row > td { background: var(--bg-accent); }
+.mail-detail-content { max-width: 60rem; }
+.mail-detail-meta { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.mail-detail-body {
   white-space: pre-wrap; word-break: break-word;
   background: var(--bg-accent); border: 1px solid var(--border);
   border-radius: 8px; padding: 0.8rem; max-height: 50vh; overflow-y: auto;
@@ -382,6 +373,12 @@ html[data-theme="dark"] .source-symbol {
 .inline-field .errorlist, .inline-field .error-message { color: var(--error); font-size: 0.85rem; margin: 0; }
 .inline-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .inline-new { margin-bottom: 0.8rem; }
+.inline-new-title { display: flex; flex-direction: column; gap: 0.2rem; }
+.inline-new-title input {
+  width: 100%; background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.35rem 0.5rem; font-weight: 600;
+}
 #config-body .picker { margin: 0.3rem 0 0.6rem; }
 #config-body details.accordion.config-item .form-card { margin-top: 0.6rem; }
 .inline-edit-form .errorlist, .inline-new .errorlist {

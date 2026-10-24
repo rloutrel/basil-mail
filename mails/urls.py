@@ -11,6 +11,7 @@ urlpatterns = [
     path("fetch/", views.fetch_now, name="fetch_now"),
     path("config/", views.config_page, name="config"),
     path("config/sources/new/", views.source_create, name="source_create"),
+    path("config/sources/new/test/", views.source_test_new, name="source_test_new"),
     path("config/sources/<int:pk>/edit/", views.source_update, name="source_update"),
     path("config/sources/<int:pk>/delete/", views.source_delete, name="source_delete"),
     path("config/sources/<int:pk>/toggle/", views.source_toggle, name="source_toggle"),

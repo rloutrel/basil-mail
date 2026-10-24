@@ -465,11 +465,10 @@ def source_delete(request, pk):
     return _config_body(request)
 
 
-def source_test(request, pk):
-    """Test the IMAP connection of a source (inline HTMX response)."""
+def _imap_test_result(request, source):
+    """Test IMAP connection parameters and render the inline result."""
     import imaplib
 
-    source = get_object_or_404(MailSource, pk=pk)
     try:
         if source.use_ssl:
             conn = imaplib.IMAP4_SSL(source.host, source.port)
@@ -496,6 +495,24 @@ def source_test(request, pk):
         request,
         "mails/config/partials/test_result.html",
         {"message": message, "status_class": status_class},
+    )
+
+
+def source_test(request, pk):
+    """Test the IMAP connection of a source (inline HTMX response)."""
+    source = get_object_or_404(MailSource, pk=pk)
+    return _imap_test_result(request, source)
+
+
+def source_test_new(request):
+    """Test the IMAP connection of a source being created (unsaved)."""
+    form = MailSourceForm(request.POST, prefix="source-new")
+    if form.is_valid():
+        return _imap_test_result(request, form.instance)
+    return render(
+        request,
+        "mails/config/partials/test_result.html",
+        {"message": _("Fix the form errors first."), "status_class": "error"},
     )
 
 
