@@ -379,6 +379,7 @@ html[data-theme="dark"] .source-symbol {
   border: 1px solid var(--border); border-radius: 6px;
   padding: 0.35rem 0.5rem; font-weight: 600;
 }
+.inline-edit-form { margin: 0; }
 #config-body .picker { margin: 0.3rem 0 0.6rem; }
 #config-body details.accordion.config-item .form-card { margin-top: 0.6rem; }
 .inline-edit-form .errorlist, .inline-new .errorlist {
@@ -507,10 +508,8 @@ html[data-theme="dark"] .source-symbol {
 .inline-new {
   border: 1px dashed var(--primary);
   background: var(--bg-accent);
-  padding: 0.8rem 0.9rem;
   margin: 0;
 }
-.inline-new .inline-fields { margin-bottom: 0.3rem; }
 
 /* Masked text field: looks like a password input but is a plain text
    input, so browsers never offer to save it as a credential. */
