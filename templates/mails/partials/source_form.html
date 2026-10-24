@@ -46,8 +46,17 @@
     {% include "mails/partials/symbol_picker.html" with picker_id="new" form=form %}
     <div class="inline-actions">
       <button type="submit" class="btn small">{% trans "Save" %}</button>
+      <button type="button" class="btn small"
+              name="source-new-test"
+              hx-post="{% url 'mails:source_test_new' %}"
+              hx-include="closest form"
+              hx-target="#test-result-new"
+              hx-swap="innerHTML">
+        {% trans "Test connection" %}
+      </button>
       <button type="button" class="btn secondary small"
               onclick="this.closest('#source-form-slot').innerHTML=''">{% trans "Cancel" %}</button>
+      <span id="test-result-new"></span>
     </div>
   </form>
 </div>

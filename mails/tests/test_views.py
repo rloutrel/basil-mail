@@ -303,6 +303,43 @@ class ConfigViewTests(TestCase):
         self.assertEqual(source.symbol, "envelope")
         self.assertEqual(source.color, "#2f6f4f")
 
+    def test_source_create_form_shows_test_connection_button(self):
+        response = self.client.get(reverse("mails:source_create"))
+        self.assertContains(response, "Test connection")
+        self.assertContains(response, reverse("mails:source_test_new"))
+        self.assertContains(response, "test-result-new")
+
+    def test_source_test_new_connection_success(self):
+        from unittest import mock
+        from mails.tests.test_imap import FakeIMAP
+        with mock.patch("imaplib.IMAP4_SSL", return_value=FakeIMAP([])):
+            response = self.client.post(reverse("mails:source_test_new"), {
+                "source-new-name": "New", "source-new-host": "imap.example.com",
+                "source-new-port": 993, "source-new-use_ssl": "on",
+                "source-new-username": "u", "source-new-password": "p",
+                "source-new-folder": "INBOX", "source-new-fetch_frequency": 10,
+            })
+        self.assertContains(response, "Connection succeeded")
+        self.assertContains(response, "test-result ok")
+        self.assertFalse(MailSource.objects.filter(name="New").exists())
+
+    def test_source_test_new_connection_failure(self):
+        from unittest import mock
+        with mock.patch("imaplib.IMAP4_SSL", side_effect=OSError("refused")):
+            response = self.client.post(reverse("mails:source_test_new"), {
+                "source-new-name": "New", "source-new-host": "imap.example.com",
+                "source-new-port": 993, "source-new-use_ssl": "on",
+                "source-new-username": "u", "source-new-password": "p",
+                "source-new-folder": "INBOX", "source-new-fetch_frequency": 10,
+            })
+        self.assertContains(response, "Connection failed")
+        self.assertContains(response, "refused")
+
+    def test_source_test_new_invalid_form(self):
+        response = self.client.post(reverse("mails:source_test_new"), {})
+        self.assertContains(response, "Fix the form errors first")
+        self.assertContains(response, "test-result error")
+
     def test_source_create_with_symbol_and_color(self):
         url = reverse("mails:source_create")
         response = self.client.post(url, {
