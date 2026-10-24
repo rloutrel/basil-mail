@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<div x-data="mailPage()" @basil:open-mail.window="openMail($event.detail)">
+<div>
   <div class="page-header" style="display:flex; align-items:center; gap:1rem;">
     <h1>{% trans "Mails" %}</h1>
     <form hx-post="{% url 'mails:fetch_now' %}" hx-swap="none" class="inline-form">
@@ -29,32 +29,25 @@
   <div id="mail-table" hx-boost="false">
     {% include "mails/partials/mail_table.html" %}
   </div>
-
-  {% include "mails/partials/modal.html" %}
 </div>
 
 <script>
-  function mailPage() {
-    return {
-      modalOpen: false,
-      modalUrl: '',
-      openMail(url) {
-        this.modalUrl = url;
-        this.modalOpen = true;
-        fetch(url)
-          .then(r => r.text())
-          .then(html => { this.$refs.modalContent.innerHTML = html; });
-      },
-      closeMail() {
-        this.modalOpen = false;
-        this.modalUrl = '';
-        this.$refs.modalContent.innerHTML = '';
+  function toggleMailRow(pk) {
+    var detail = document.getElementById('mail-detail-' + pk);
+    var body = document.getElementById('mail-body-' + pk);
+    var row = document.getElementById('mail-row-' + pk);
+    if (detail.hidden) {
+      detail.hidden = false;
+      if (!body.innerHTML.trim()) {
+        htmx.ajax('GET', row.dataset.mailUrl, {target: body, swap: 'innerHTML'});
       }
-    };
+    } else {
+      detail.hidden = true;
+      body.innerHTML = '';
+    }
   }
-  window.__openMail = function (url) {
-    document.dispatchEvent(new CustomEvent('basil:open-mail', { detail: url }));
-  };
+</script>
+<script>
   function showFetchFeedback(btn) {
     var fb = document.getElementById('fetch-feedback');
     fb.style.display = 'inline';

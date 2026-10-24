@@ -159,6 +159,23 @@ class MailListViewTests(TestCase):
         self.assertContains(response, "Read https://example.com/article")
         self.assertContains(response, 'href="https://example.com/article"')
 
+    def test_mail_table_rows_expand_with_secondary_detail_row(self):
+        response = self.client.get(reverse("mails:mail_table"))
+        html = response.content.decode()
+        self.assertIn("toggleMailRow(%d)" % self.m1.pk, html)
+        self.assertIn('id="mail-row-%d"' % self.m1.pk, html)
+        self.assertIn('data-mail-url="/mails/%d/"' % self.m1.pk, html)
+        self.assertIn('id="mail-detail-%d"' % self.m1.pk, html)
+        self.assertIn('id="mail-body-%d"' % self.m1.pk, html)
+        self.assertIn('hidden', html)
+        self.assertNotIn("__openMail", html)
+        self.assertNotIn("modal", html)
+
+    def test_mail_detail_row_content_has_no_subject_heading(self):
+        response = self.client.get(reverse("mails:mail_detail", args=[self.m3.pk]))
+        self.assertNotContains(response, "<h2>")
+        self.assertContains(response, "mail-detail-body")
+
     def test_fetch_now_returns_202(self):
         response = self.client.post(reverse("mails:fetch_now"))
         self.assertEqual(response.status_code, 202)

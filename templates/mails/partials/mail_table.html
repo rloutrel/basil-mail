@@ -12,8 +12,10 @@
     </thead>
     <tbody>
       {% for mail in mails %}
-      <tr class="{% if mail.rule_matches.all %}mail-matched{% else %}mail-unsorted{% endif %}"
-          onclick="window.__openMail('{% url 'mails:mail_detail' mail.pk %}')">
+      <tr class="{% if mail.rule_matches.all %}mail-matched{% else %}mail-unsorted{% endif %} mail-row"
+          id="mail-row-{{ mail.pk }}"
+          data-mail-url="{% url 'mails:mail_detail' mail.pk %}"
+          onclick="toggleMailRow({{ mail.pk }})">
         <td data-col="mailbox" class="cell-mailbox">
           <span class="source-symbol"
                 style="--source-color: {{ mail.source.color }}; --source-color-dark: {{ mail.source.color_dark }};"
@@ -32,6 +34,9 @@
             <span title="{% trans 'Unsorted' %}"></span>
           {% endfor %}
         </td>
+      </tr>
+      <tr class="mail-detail-row" id="mail-detail-{{ mail.pk }}" hidden>
+        <td colspan="5"><div class="mail-detail-content" id="mail-body-{{ mail.pk }}"></div></td>
       </tr>
       {% empty %}
       <tr><td colspan="5" class="empty">{% trans "No mails match the current filters." %}</td></tr>
