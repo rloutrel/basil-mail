@@ -43,7 +43,6 @@
       {{ form.color_dark.as_hidden }}
       {{ form.fetch_frequency.as_hidden }}
     </div>
-    {% include "mails/partials/symbol_picker.html" with picker_id="new" form=form %}
     <div class="inline-actions">
       <button type="submit" class="btn small">{% trans "Save" %}</button>
       <button type="button" class="btn small"
@@ -58,5 +57,6 @@
               onclick="this.closest('#source-form-slot').innerHTML=''">{% trans "Cancel" %}</button>
       <span id="test-result-new"></span>
     </div>
+    {% include "mails/partials/symbol_picker.html" with picker_id="new" form=form %}
   </form>
 </div>
